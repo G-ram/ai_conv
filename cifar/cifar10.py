@@ -200,6 +200,7 @@ def inference(images, conv1, conv2):
   # by replacing all instances of tf.get_variable() with tf.Variable().
   #
   # conv1
+  '''
   with tf.variable_scope('conv1') as scope:
     kernel = _variable_with_weight_decay('weights',
                                          shape=[5, 5, 3, 64],
@@ -210,15 +211,19 @@ def inference(images, conv1, conv2):
     pre_activation = tf.nn.bias_add(conv, biases)
     conv1 = tf.nn.relu(pre_activation, name=scope.name)
     _activation_summary(conv1)
+  '''
+  conv1.set_input(images)
+  _activation_summary(conv1.conv())
 
   # pool1
-  pool1 = tf.nn.max_pool(conv1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
+  pool1 = tf.nn.max_pool(conv1.conv(), ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
                          padding='SAME', name='pool1')
   # norm1
   norm1 = tf.nn.lrn(pool1, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
                     name='norm1')
 
   # conv2
+  '''
   with tf.variable_scope('conv2') as scope:
     kernel = _variable_with_weight_decay('weights',
                                          shape=[5, 5, 64, 64],
@@ -229,9 +234,12 @@ def inference(images, conv1, conv2):
     pre_activation = tf.nn.bias_add(conv, biases)
     conv2 = tf.nn.relu(pre_activation, name=scope.name)
     _activation_summary(conv2)
+  '''
 
+  conv2.set_input(conv1)
+  _activation_summary(conv2.conv())
   # norm2
-  norm2 = tf.nn.lrn(conv2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
+  norm2 = tf.nn.lrn(conv2.conv(), 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
                     name='norm2')
   # pool2
   pool2 = tf.nn.max_pool(norm2, ksize=[1, 3, 3, 1],

@@ -60,7 +60,25 @@ tf.app.flags.DEFINE_integer('num_gpus', 1,
                             """How many GPUs to use.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
+tf.app.flags.DEFINE_string('ckpt', None,
+                           """Checkpoint to start at""")
+tf.app.flags.DEFINE_string('conv1', 'Conv3D',
+                            """Separate first layer""")
+tf.app.flags.DEFINE_string('conv2', 'Conv3D',
+                            """Separate second layer""")
+conv1_options = {
+  'Conv3D' : Conv3D('conv1', [5, 5, 3, 64]),
+  'ConvSepDHV' : ConvSepDHV('conv1', [5, 5, 3, 64]),
+  'ConvSepHV' : ConvSepHV('conv1', [5, 5, 3, 64]),
+  'ConvSep2D' : ConvSep2D('conv1', [5, 5, 3, 64])
+}
 
+conv2_options = {
+  'Conv3D' : Conv3D('conv2', [5, 5, 64, 64]),
+  'ConvSepDHV' : ConvSepDHV('conv2', [5, 5, 64, 64]),
+  'ConvSepHV' : ConvSepHV('conv2', [5, 5, 64, 64]),
+  'ConvSep2D' : ConvSep2D('conv2', [5, 5, 64, 64])
+}
 
 def tower_loss(scope, images, labels):
   """Calculate the total loss on a single tower running the CIFAR model.
@@ -75,7 +93,8 @@ def tower_loss(scope, images, labels):
   """
 
   # Build inference Graph.
-  logits = cifar10.inference(images)
+  logits = cifar10.inference(images, 
+    conv1_options[FLAGS.conv1], conv2_options[FLAGS.conv2])
 
   # Build the portion of the Graph calculating the losses. Note that we will
   # assemble the total_loss using a custom function below.
@@ -233,12 +252,18 @@ def train():
         log_device_placement=FLAGS.log_device_placement))
     sess.run(init)
 
+    # Restore from a checkpoint just in case training was corrupted
+    start_step = 0
+    if FLAGS.ckpt:
+      saver.restore(sess, FLAGS.ckpt)
+      start_step = global_step.eval()
+
     # Start the queue runners.
     tf.train.start_queue_runners(sess=sess)
 
     summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph)
 
-    for step in xrange(FLAGS.max_steps):
+    for step in xrange(start_step, FLAGS.max_steps):
       start_time = time.time()
       _, loss_value = sess.run([train_op, loss])
       duration = time.time() - start_time

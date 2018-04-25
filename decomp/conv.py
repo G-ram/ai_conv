@@ -23,6 +23,9 @@ class Conv(object):
     def conv(self):
         return self.graph
 
+    def set_shape(self, shape):
+        self.shape = shape
+
     def set_input(self, input):
         self.input = input
 
