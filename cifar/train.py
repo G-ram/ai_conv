@@ -70,6 +70,8 @@ tf.app.flags.DEFINE_string('conv1', 'Conv3D',
                             """Separate first layer""")
 tf.app.flags.DEFINE_string('init1', None,
                             """Initialization for first layer""")
+tf.app.flags.DEFINE_string('conv2', 'Conv3D',
+                            """Separate second layer""")
 tf.app.flags.DEFINE_string('init2', None,
                             """Initialization for second layer""")
 conv1_options = {
@@ -87,24 +89,24 @@ conv2_options = {
 }
 
 def parse_conv1():
+  initializers = [None] * 3
   if FLAGS.init1:
     paths = FLAGS.init1.split(',')
-    initializers = [None] * 3
     for p in paths:
       with open(p, 'rb') as f:
         initializers.append(pickle.load(f))
 
-  return conv1_options[FLAGs.conv1]('conv1', [5, 5, 3, 64], init=initializers)
+  return conv1_options[FLAGS.conv1]('conv1', [5, 5, 3, 64], init=initializers)
 
 def parse_conv2():
+  initializers = [None] * 3
   if FLAGS.init1:
-    paths = FLAGS.init1.split(',')
-    initializers = [None] * 3
+    paths = FLAGS.init2.split(',')
     for p in paths:
       with open(p, 'rb') as f:
         initializers.append(pickle.load(f))
 
-    conv1_options[FLAGs.conv1]('conv2', [5, 5, 64, 64], init=initializers)
+    conv2_options[FLAGS.conv2]('conv2', [5, 5, 64, 64], init=initializers)
 
 def tower_loss(scope, images, labels):
   """Calculate the total loss on a single tower running the CIFAR model.
