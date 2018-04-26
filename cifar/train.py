@@ -43,6 +43,7 @@ from datetime import datetime
 import os.path
 import re
 import time
+import pickle
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
@@ -64,21 +65,43 @@ tf.app.flags.DEFINE_string('ckpt', None,
                            """Checkpoint to start at""")
 tf.app.flags.DEFINE_string('conv1', 'Conv3D',
                             """Separate first layer""")
-tf.app.flags.DEFINE_string('conv2', 'Conv3D',
-                            """Separate second layer""")
+tf.app.flags.DEFINE_string('init1', None,
+                            """Initialization for first layer""")
+tf.app.flags.DEFINE_string('init2', None,
+                            """Initialization for second layer""")
 conv1_options = {
-  'Conv3D' : Conv3D('conv1', [5, 5, 3, 64]),
-  'ConvSepDHV' : ConvSepDHV('conv1', [5, 5, 3, 64]),
-  'ConvSepHV' : ConvSepHV('conv1', [5, 5, 3, 64]),
-  'ConvSep2D' : ConvSep2D('conv1', [5, 5, 3, 64])
+  'Conv3D' : Conv3D,
+  'ConvSepDHV' : ConvSepDHV,
+  'ConvSepHV' : ConvSepHV,
+  'ConvSep2D' : ConvSep2D
 }
 
 conv2_options = {
-  'Conv3D' : Conv3D('conv2', [5, 5, 64, 64]),
-  'ConvSepDHV' : ConvSepDHV('conv2', [5, 5, 64, 64]),
-  'ConvSepHV' : ConvSepHV('conv2', [5, 5, 64, 64]),
-  'ConvSep2D' : ConvSep2D('conv2', [5, 5, 64, 64])
+  'Conv3D' : Conv3D,
+  'ConvSepDHV' : ConvSepDHV,
+  'ConvSepHV' : ConvSepHV,
+  'ConvSep2D' : ConvSep2D
 }
+
+def parse_conv1():
+  if FLAGS.init1:
+    paths = FLAGS.init1.split(',')
+    initializers = [None] * 3
+    for p in paths:
+      with open(p, 'rb') as f:
+        initializers.append(pickle.load(f))
+
+  return conv1_options[FLAGs.conv1]('conv1', [5, 5, 3, 64], init=initializers)
+
+def parse_conv2():
+  if FLAGS.init1:
+    paths = FLAGS.init1.split(',')
+    initializers = [None] * 3
+    for p in paths:
+      with open(p, 'rb') as f:
+        initializers.append(pickle.load(f))
+
+    conv1_options[FLAGs.conv1]('conv2', [5, 5, 64, 64], init=initializers)
 
 def tower_loss(scope, images, labels):
   """Calculate the total loss on a single tower running the CIFAR model.
@@ -94,7 +117,7 @@ def tower_loss(scope, images, labels):
 
   # Build inference Graph.
   logits = cifar10.inference(images, 
-    conv1_options[FLAGS.conv1], conv2_options[FLAGS.conv2])
+    parse_conv1(), parse_conv2())
 
   # Build the portion of the Graph calculating the losses. Note that we will
   # assemble the total_loss using a custom function below.
