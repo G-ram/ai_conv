@@ -50,6 +50,9 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 import cifar10
 
+from decomp.conv import Conv3D, ConvSepDHV, ConvSepHV, ConvSep2D
+from decomp import decompose
+
 FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string('train_dir', '/tmp/cifar10_train',

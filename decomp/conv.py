@@ -34,7 +34,7 @@ class ConvSepDHV(Conv):
     def __init__(self, shape, name=None, init=[None, None, None], 
     	stride=[1, 1, 1, 1], padding='SAME'):
         super(ConvSepDHV, self).__init__(shape, name)
-	    dtype = tf.float16 if FLAGS.use_fp16 else tf.float32
+        dtype = tf.float16 if FLAGS.use_fp16 else tf.float32
         self.init = [i if i else tf.truncated_normal_initializer(stddev=5e-2, dtype=dtype) for i in init]
 
     def set_input(self, input):
