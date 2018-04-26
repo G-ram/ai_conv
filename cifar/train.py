@@ -96,17 +96,17 @@ def parse_conv1():
       with open(p, 'rb') as f:
         initializers.append(pickle.load(f))
 
-  return conv1_options[FLAGS.conv1]('conv1', [5, 5, 3, 64], init=initializers)
+  return conv1_options[FLAGS.conv1]([5, 5, 3, 64], 'conv1', init=initializers)
 
 def parse_conv2():
   initializers = [None] * 3
-  if FLAGS.init1:
+  if FLAGS.init2:
     paths = FLAGS.init2.split(',')
     for p in paths:
       with open(p, 'rb') as f:
         initializers.append(pickle.load(f))
 
-    conv2_options[FLAGS.conv2]('conv2', [5, 5, 64, 64], init=initializers)
+  return conv2_options[FLAGS.conv2]([5, 5, 64, 64], 'conv2', init=initializers)
 
 def tower_loss(scope, images, labels):
   """Calculate the total loss on a single tower running the CIFAR model.
