@@ -57,7 +57,27 @@ tf.app.flags.DEFINE_integer('num_examples', 10000,
                             """Number of examples to run.""")
 tf.app.flags.DEFINE_boolean('run_once', False,
                          """Whether to run eval only once.""")
+tf.app.flags.DEFINE_string('conv1', 'Conv3D',
+                            """Separate first layer""")
+tf.app.flags.DEFINE_string('init1', None,
+                            """Initialization for first layer""")
+tf.app.flags.DEFINE_string('conv2', 'Conv3D',
+                            """Separate second layer""")
+tf.app.flags.DEFINE_string('init2', None,
+                            """Initialization for second layer""")
+conv1_options = {
+  'Conv3D' : Conv3D,
+  'ConvSepDHV' : ConvSepDHV,
+  'ConvSepHV' : ConvSepHV,
+  'ConvSep2D' : ConvSep2D
+}
 
+conv2_options = {
+  'Conv3D' : Conv3D,
+  'ConvSepDHV' : ConvSepDHV,
+  'ConvSepHV' : ConvSepHV,
+  'ConvSep2D' : ConvSep2D
+}
 
 def eval_once(saver, summary_writer, top_k_op, summary_op):
   """Run Eval once.
@@ -112,8 +132,28 @@ def eval_once(saver, summary_writer, top_k_op, summary_op):
     coord.request_stop()
     coord.join(threads, stop_grace_period_secs=10)
 
+def parse_conv1():
+  initializers = [None] * 3
+  if FLAGS.init1:
+    paths = FLAGS.init1.split(',')
+    for p in paths:
+      with open(p, 'rb') as f:
+        initializers.append(pickle.load(f))
+
+  return conv1_options[FLAGS.conv1]([5, 5, 3, 64], 'conv1', init=initializers)
+
+def parse_conv2():
+  initializers = [None] * 3
+  if FLAGS.init2:
+    paths = FLAGS.init2.split(',')
+    for p in paths:
+      with open(p, 'rb') as f:
+        initializers.append(pickle.load(f))
+
+  return conv2_options[FLAGS.conv2]([5, 5, 64, 64], 'conv2', init=initializers)
 
 def evaluate():
+
   """Eval CIFAR-10 for a number of steps."""
   with tf.Graph().as_default() as g:
     # Get images and labels for CIFAR-10.
@@ -122,7 +162,8 @@ def evaluate():
 
     # Build a Graph that computes the logits predictions from the
     # inference model.
-    logits = cifar10.inference(images)
+    logits = cifar10.inference(images, 
+    parse_conv1(), parse_conv2())
 
     # Calculate predictions.
     top_k_op = tf.nn.in_top_k(logits, labels, 1)
