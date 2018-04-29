@@ -284,7 +284,7 @@ def train():
     start_step = 0
     if FLAGS.ckpt:
       saver.restore(sess, FLAGS.ckpt)
-      start_step = global_step.eval()
+      start_step = global_step.eval(session=sess)
 
     # Start the queue runners.
     tf.train.start_queue_runners(sess=sess)
@@ -305,7 +305,7 @@ def train():
 
         format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
                       'sec/batch)')
-        print (format_str % (datetime.now(), step, loss_value, precision,
+        print (format_str % (datetime.now(), step, loss_value,
                              examples_per_sec, sec_per_batch))
 
         summary_str = sess.run(summary_op)
@@ -319,9 +319,6 @@ def train():
 
 def main(argv=None):  # pylint: disable=unused-argument
   cifar10.maybe_download_and_extract()
-  if tf.gfile.Exists(FLAGS.train_dir):
-    tf.gfile.DeleteRecursively(FLAGS.train_dir)
-  tf.gfile.MakeDirs(FLAGS.train_dir)
   train()
 
 
