@@ -58,7 +58,7 @@ FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('train_dir', '/tmp/cifar10_train',
                            """Directory where to write event logs """
                            """and checkpoint.""")
-tf.app.flags.DEFINE_integer('max_steps', 100000,
+tf.app.flags.DEFINE_integer('max_steps', 100001,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_integer('num_gpus', 1,
                             """How many GPUs to use.""")
@@ -264,7 +264,7 @@ def train():
     train_op = tf.group(apply_gradient_op, variables_averages_op)
 
     # Create a saver.
-    saver = tf.train.Saver(tf.global_variables())
+    saver = tf.train.Saver(tf.global_variables(), max_to_keep=10000)
 
     # Build the summary operation from the last tower summaries.
     summary_op = tf.summary.merge(summaries)
