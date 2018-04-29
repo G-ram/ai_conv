@@ -37,11 +37,16 @@ from __future__ import print_function
 from datetime import datetime
 import math
 import time
+import os
+import pickle
 
 import numpy as np
 import tensorflow as tf
 
 import cifar10
+
+from decomp.conv import Conv3D, ConvSepDHV, ConvSepHV, ConvSep2D
+from decomp import decompose
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -49,8 +54,10 @@ tf.app.flags.DEFINE_string('eval_dir', '/tmp/cifar10_eval',
                            """Directory where to write event logs.""")
 tf.app.flags.DEFINE_string('eval_data', 'test',
                            """Either 'test' or 'train_eval'.""")
-tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/cifar10_train',
+tf.app.flags.DEFINE_string('ckpt_dir', '/tmp/cifar10_train',
                            """Directory where to read model checkpoints.""")
+tf.app.flags.DEFINE_string('ckpt', None,
+                           """Checkpoint to evaluate.""")
 tf.app.flags.DEFINE_integer('eval_interval_secs', 60 * 5,
                             """How often to run the eval.""")
 tf.app.flags.DEFINE_integer('num_examples', 10000,
@@ -79,7 +86,12 @@ conv2_options = {
   'ConvSep2D' : ConvSep2D
 }
 
-def eval_once(saver, summary_writer, top_k_op, summary_op):
+def dump_data(file, data):
+  path = os.path.join(FLAGS.data_dir, file)
+  with open(path, 'w+') as f:
+    pickle.dump(data, f)
+
+def eval_once(saver, summary_writer, top_k_op, loss, summary_op):
   """Run Eval once.
 
   Args:
@@ -88,49 +100,56 @@ def eval_once(saver, summary_writer, top_k_op, summary_op):
     top_k_op: Top K op.
     summary_op: Summary op.
   """
-  with tf.Session() as sess:
-    ckpt = tf.train.get_checkpoint_state(FLAGS.checkpoint_dir)
-    if ckpt and ckpt.model_checkpoint_path:
+  data = {'loss':[], 'precision':[]}
+  ckpt_paths = tf.train.get_checkpoint_state(FLAGS.ckpt_dir).all_model_checkpoint_paths
+  if FLAGS.ckpt:
+    ckpt_paths = [os.path.join(FLAGS.ckpt_dir, FLAGS.ckpt)]
+  for ckpt_path in ckpt_paths:
+    global_step = None
+    with tf.Session() as sess:
       # Restores from checkpoint
-      saver.restore(sess, ckpt.model_checkpoint_path)
+      saver.restore(sess, ckpt_path)
       # Assuming model_checkpoint_path looks something like:
       #   /my-favorite-path/cifar10_train/model.ckpt-0,
       # extract global_step from it.
-      global_step = ckpt.model_checkpoint_path.split('/')[-1].split('-')[-1]
-    else:
-      print('No checkpoint file found')
-      return
+      global_step = ckpt_path.split('/')[-1].split('-')[-1]
 
-    # Start the queue runners.
-    coord = tf.train.Coordinator()
-    try:
-      threads = []
-      for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS):
-        threads.extend(qr.create_threads(sess, coord=coord, daemon=True,
-                                         start=True))
+      # Start the queue runners.
+      coord = tf.train.Coordinator()
+      try:
+        threads = []
+        for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS):
+          threads.extend(qr.create_threads(sess, coord=coord, daemon=True,
+                                           start=True))
 
-      num_iter = int(math.ceil(FLAGS.num_examples / FLAGS.batch_size))
-      true_count = 0  # Counts the number of correct predictions.
-      total_sample_count = num_iter * FLAGS.batch_size
-      step = 0
-      while step < num_iter and not coord.should_stop():
-        predictions = sess.run([top_k_op])
-        true_count += np.sum(predictions)
-        step += 1
+        num_iter = int(math.ceil(FLAGS.num_examples / FLAGS.batch_size))
+        true_count = 0  # Counts the number of correct predictions.
+        total_sample_count = num_iter * FLAGS.batch_size
+        step = 0
+        loss_value = sess.run(loss)
+        while step < num_iter and not coord.should_stop():
+          predictions = sess.run([top_k_op])
+          true_count += np.sum(predictions)
+          step += 1
 
-      # Compute precision @ 1.
-      precision = true_count / total_sample_count
-      print('%s: precision @ 1 = %.3f' % (datetime.now(), precision))
+        # Compute precision @ 1.
+        precision = true_count / total_sample_count
+        data['loss'].append(loss_value)
+        data['precision'].append(precision)
+        print('Step %s: precision = %.3f loss = %.3f' % (global_step, precision, loss_value))
 
-      summary = tf.Summary()
-      summary.ParseFromString(sess.run(summary_op))
-      summary.value.add(tag='Precision @ 1', simple_value=precision)
-      summary_writer.add_summary(summary, global_step)
-    except Exception as e:  # pylint: disable=broad-except
-      coord.request_stop(e)
+        summary = tf.Summary()
+        summary.ParseFromString(sess.run(summary_op))
+        summary.value.add(tag='Precision @ 1', simple_value=precision)
+        summary_writer.add_summary(summary, global_step)
+      except Exception as e:  # pylint: disable=broad-except
+        coord.request_stop(e)
 
-    coord.request_stop()
-    coord.join(threads, stop_grace_period_secs=10)
+      coord.request_stop()
+      coord.join(threads, stop_grace_period_secs=10)
+
+  dump_data('loss.result', data['loss'])
+  dump_data('precision.result', data['precision'])
 
 def parse_conv1():
   initializers = [None] * 3
@@ -165,6 +184,8 @@ def evaluate():
     logits = cifar10.inference(images, 
     parse_conv1(), parse_conv2())
 
+    loss = cifar10.loss(logits, labels)
+
     # Calculate predictions.
     top_k_op = tf.nn.in_top_k(logits, labels, 1)
 
@@ -180,7 +201,7 @@ def evaluate():
     summary_writer = tf.summary.FileWriter(FLAGS.eval_dir, g)
 
     while True:
-      eval_once(saver, summary_writer, top_k_op, summary_op)
+      eval_once(saver, summary_writer, top_k_op, loss, summary_op)
       if FLAGS.run_once:
         break
       time.sleep(FLAGS.eval_interval_secs)

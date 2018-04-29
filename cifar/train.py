@@ -142,7 +142,7 @@ def tower_loss(scope, images, labels):
     loss_name = re.sub('%s_[0-9]*/' % cifar10.TOWER_NAME, '', l.op.name)
     tf.summary.scalar(loss_name, l)
 
-  return total_loss, logits
+  return total_loss
 
 
 def average_gradients(tower_grads):
@@ -222,7 +222,7 @@ def train():
             # Calculate the loss for one tower of the CIFAR model. This function
             # constructs the entire CIFAR model but shares the variables across
             # all towers.
-            loss, logits = tower_loss(scope, image_batch, label_batch)
+            loss = tower_loss(scope, image_batch, label_batch)
 
             # Reuse variables for the next tower.
             tf.get_variable_scope().reuse_variables()
@@ -262,9 +262,6 @@ def train():
 
     # Group all updates to into a single train op.
     train_op = tf.group(apply_gradient_op, variables_averages_op)
-
-    # Predictions op
-    top_k_op = tf.nn.in_top_k(logits, labels, 1)
 
     # Create a saver.
     saver = tf.train.Saver(tf.global_variables())
@@ -306,12 +303,7 @@ def train():
         examples_per_sec = num_examples_per_step / duration
         sec_per_batch = duration / FLAGS.num_gpus
 
-        total_sample_count = FLAGS.batch_size
-        predictions = sess.run([top_k_op])
-        true_count = np.sum(predictions)
-
-        precision = true_count / total_sample_count
-        format_str = ('%s: step %d, loss = %.2f precision = %.2f (%.1f examples/sec; %.3f '
+        format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
                       'sec/batch)')
         print (format_str % (datetime.now(), step, loss_value, precision,
                              examples_per_sec, sec_per_batch))
