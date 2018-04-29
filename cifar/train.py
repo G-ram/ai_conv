@@ -263,6 +263,9 @@ def train():
     # Group all updates to into a single train op.
     train_op = tf.group(apply_gradient_op, variables_averages_op)
 
+    # Predictions op
+    top_k_op = tf.nn.in_top_k(logits, labels, 1)
+
     # Create a saver.
     saver = tf.train.Saver(tf.global_variables())
 
@@ -298,14 +301,19 @@ def train():
 
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
-      if step % 10 == 0:
+      if step % 100 == 0:
         num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
         examples_per_sec = num_examples_per_step / duration
         sec_per_batch = duration / FLAGS.num_gpus
 
-        format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
+        total_sample_count = FLAGS.batch_size
+        predictions = sess.run([top_k_op])
+        true_count = np.sum(predictions)
+
+        precision = true_count / total_sample_count
+        format_str = ('%s: step %d, loss = %.2f precision = %.2f (%.1f examples/sec; %.3f '
                       'sec/batch)')
-        print (format_str % (datetime.now(), step, loss_value,
+        print (format_str % (datetime.now(), step, loss_value, precision,
                              examples_per_sec, sec_per_batch))
 
       if step % 100 == 0:
