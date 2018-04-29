@@ -87,7 +87,8 @@ conv2_options = {
 }
 
 def dump_data(file, data):
-  path = os.path.join(FLAGS.data_dir, file)
+  print(file)
+  path = os.path.join(FLAGS.eval_dir, file)
   with open(path, 'w+') as f:
     pickle.dump(data, f)
 
@@ -100,7 +101,7 @@ def eval_once(saver, summary_writer, top_k_op, loss, summary_op):
     top_k_op: Top K op.
     summary_op: Summary op.
   """
-  data = {'loss':[], 'precision':[]}
+  data = {'loss':[], 'error': [], 'epoch': []}
   ckpt_paths = tf.train.get_checkpoint_state(FLAGS.ckpt_dir).all_model_checkpoint_paths
   if FLAGS.ckpt:
     ckpt_paths = [os.path.join(FLAGS.ckpt_dir, FLAGS.ckpt)]
@@ -135,7 +136,8 @@ def eval_once(saver, summary_writer, top_k_op, loss, summary_op):
         # Compute precision @ 1.
         precision = true_count / total_sample_count
         data['loss'].append(loss_value)
-        data['precision'].append(precision)
+        data['error'].append(1 - precision)
+        data['epoch'].append(int(global_step))
         print('Step %s: precision = %.3f loss = %.3f' % (global_step, precision, loss_value))
 
         summary = tf.Summary()
@@ -149,7 +151,8 @@ def eval_once(saver, summary_writer, top_k_op, loss, summary_op):
       coord.join(threads, stop_grace_period_secs=10)
 
   dump_data('loss.result', data['loss'])
-  dump_data('precision.result', data['precision'])
+  dump_data('error.result', data['error'])
+  dump_data('epoch.result', data['epoch'])
 
 def parse_conv1():
   initializers = [None] * 3
