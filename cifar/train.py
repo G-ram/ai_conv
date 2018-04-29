@@ -142,7 +142,7 @@ def tower_loss(scope, images, labels):
     loss_name = re.sub('%s_[0-9]*/' % cifar10.TOWER_NAME, '', l.op.name)
     tf.summary.scalar(loss_name, l)
 
-  return total_loss
+  return total_loss, logits
 
 
 def average_gradients(tower_grads):
@@ -222,7 +222,7 @@ def train():
             # Calculate the loss for one tower of the CIFAR model. This function
             # constructs the entire CIFAR model but shares the variables across
             # all towers.
-            loss = tower_loss(scope, image_batch, label_batch)
+            loss, logits = tower_loss(scope, image_batch, label_batch)
 
             # Reuse variables for the next tower.
             tf.get_variable_scope().reuse_variables()
@@ -301,7 +301,7 @@ def train():
 
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
-      if step % 100 == 0:
+      if step % 10 == 0:
         num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
         examples_per_sec = num_examples_per_step / duration
         sec_per_batch = duration / FLAGS.num_gpus
