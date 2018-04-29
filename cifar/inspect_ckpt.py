@@ -19,6 +19,7 @@ from __future__ import print_function
 
 import argparse
 import sys
+import pickle
 
 import numpy as np
 
@@ -27,7 +28,6 @@ from tensorflow.python.platform import app
 from tensorflow.python.platform import flags
 
 FLAGS = None
-
 
 def print_tensors_in_checkpoint_file(file_name, tensor_name, all_tensors,
                                      all_tensor_names=False):
@@ -56,7 +56,11 @@ def print_tensors_in_checkpoint_file(file_name, tensor_name, all_tensors,
       print(reader.debug_string().decode("utf-8"))
     else:
       print("tensor_name: ", tensor_name)
-      print(reader.get_tensor(tensor_name))
+      tensor = reader.get_tensor(tensor_name)
+      print(tensor)
+      if FLAGS.dump:
+        with open(FLAGS.dump, 'w+') as f:
+          pickle.dump(tensor, f)
   except Exception as e:  # pylint: disable=broad-except
     print(str(e))
     if "corrupted compressed block contents" in str(e):
@@ -147,6 +151,10 @@ if __name__ == "__main__":
       type="bool",
       default=False,
       help="If True, print the names of all the tensors.")
+  parser.add_argument(
+      "--dump",
+      type=str,
+      help="Dump the tensor to a file")
   parser.add_argument(
       "--printoptions",
       nargs="*",
