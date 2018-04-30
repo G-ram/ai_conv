@@ -52,10 +52,10 @@ class ConvSepDHV(Conv):
                 None if type(self.init[0]) is np.ndarray else conv1_shape, self.init[0])
             # kernel shape: rows, 1, filters, 1
             kernel2 = _variable_on_cpu('weights_h', 
-                None if type(self.init[1]) is np.ndarray None else conv2_shape, self.init[1])
+                None if type(self.init[1]) is np.ndarray else conv2_shape, self.init[1])
             # kernel shape: 1, cols, filters, 1
             kernel3 = _variable_on_cpu('weights_v', 
-                None if type(self.init[2]) is np.ndarray None else conv3_shape, self.init[2])
+                None if type(self.init[2]) is np.ndarray else conv3_shape, self.init[2])
 
             print(self.input.shape)
             conv1 = tf.nn.conv2d(self.input, kernel1, self.stride, padding=self.padding)
@@ -89,9 +89,9 @@ class ConvSepHV(Conv):
 
             # kernel shape: rows, cols, channels, filters
             kernel1 = _variable_on_cpu('weights_h', 
-                None if type(self.init[0]) is np.ndarray None else conv1_shape, self.init[0])
+                None if type(self.init[0]) is np.ndarray else conv1_shape, self.init[0])
             kernel2 = _variable_on_cpu('weights_v', 
-                None if type(self.init[1]) is np.ndarray None else
+                None if type(self.init[1]) is np.ndarray else
                 conv2_shape + [filters, 1], self.init[1])
 
             conv1 = tf.nn.depthwise_conv2d(self.input, kernel1, 
