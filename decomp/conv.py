@@ -47,6 +47,7 @@ class ConvSepDHV(Conv):
             conv3_shape = [rows, 1, filters, 1]
 
             # kernel shape: 1, 1, channels, filters
+            print(self.init[0])
             kernel1 = _variable_on_cpu('weights_d', 
                 None if self.init[0] is not None else conv1_shape, self.init[0])
             # kernel shape: rows, 1, filters, 1
