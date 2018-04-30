@@ -108,6 +108,22 @@ def parse_conv2():
 
   return conv2_options[FLAGS.conv2]([5, 5, 64, 64], 'conv2', init=initializers)
 
+def optimistic_restore(session, save_file):
+  reader = tf.train.NewCheckpointReader(save_file)
+  saved_shapes = reader.get_variable_to_shape_map()
+  var_names = sorted([(var.name, var.name.split(':')[0]) for var in tf.global_variables()
+    if var.name.split(':')[0] in saved_shapes])
+  restore_vars = []
+  name2var = dict(zip(map(lambda x:x.name.split(':')[0], tf.global_variables()), tf.global_variables()))
+  with tf.variable_scope('', reuse=True):
+    for var_name, saved_var_name in var_names:
+      curr_var = name2var[saved_var_name]
+      var_shape = curr_var.get_shape().as_list()
+      if var_shape == saved_shapes[saved_var_name]:
+        restore_vars.append(curr_var)
+  saver = tf.train.Saver(restore_vars)
+  saver.restore(session, save_file)
+
 def tower_loss(scope, images, labels):
   """Calculate the total loss on a single tower running the CIFAR model.
 
@@ -283,7 +299,8 @@ def train():
     # Restore from a checkpoint just in case training was corrupted
     start_step = 0
     if FLAGS.ckpt:
-      saver.restore(sess, FLAGS.ckpt)
+      # saver.restore(sess, FLAGS.ckpt)
+      optimistic_restore(sess, FLAGS.ckpt)
       start_step = global_step.eval(session=sess)
 
     # Start the queue runners.
@@ -296,7 +313,7 @@ def train():
       _, loss_value = sess.run([train_op, loss])
       duration = time.time() - start_time
 
-      assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
+      # assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
       if step % 100 == 0:
         num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
