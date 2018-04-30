@@ -313,7 +313,7 @@ def train():
       _, loss_value = sess.run([train_op, loss])
       duration = time.time() - start_time
 
-      # assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
+      assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
       if step % 100 == 0:
         num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
