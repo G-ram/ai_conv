@@ -92,9 +92,9 @@ def parse_conv1():
   initializers = [None] * 3
   if FLAGS.init1:
     paths = FLAGS.init1.split(',')
-    for p in paths:
+    for i, p in enumerate(paths):
       with open(p, 'rb') as f:
-        initializers.append(pickle.load(f))
+        initializers[i] = pickle.load(f)
 
   return conv1_options[FLAGS.conv1]([5, 5, 3, 64], 'conv1', init=initializers)
 
@@ -102,9 +102,9 @@ def parse_conv2():
   initializers = [None] * 3
   if FLAGS.init2:
     paths = FLAGS.init2.split(',')
-    for p in paths:
+    for i, p in enumerate(paths):
       with open(p, 'rb') as f:
-        initializers.append(pickle.load(f))
+        initializers[i] = pickle.load(f)
 
   return conv2_options[FLAGS.conv2]([5, 5, 64, 64], 'conv2', init=initializers)
 
