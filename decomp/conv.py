@@ -49,13 +49,13 @@ class ConvSepDHV(Conv):
             # kernel shape: 1, 1, channels, filters
             print(self.init[0])
             kernel1 = _variable_on_cpu('weights_d', 
-                None if self.init[0] is not None else conv1_shape, self.init[0])
+                None if type(self.init[0]) is np.ndarray else conv1_shape, self.init[0])
             # kernel shape: rows, 1, filters, 1
             kernel2 = _variable_on_cpu('weights_h', 
-                None if self.init[1] is not None else conv2_shape, self.init[1])
+                None if type(self.init[1]) is np.ndarray None else conv2_shape, self.init[1])
             # kernel shape: 1, cols, filters, 1
             kernel3 = _variable_on_cpu('weights_v', 
-                None if self.init[2] is not None else conv3_shape, self.init[2])
+                None if type(self.init[2]) is np.ndarray None else conv3_shape, self.init[2])
 
             print(self.input.shape)
             conv1 = tf.nn.conv2d(self.input, kernel1, self.stride, padding=self.padding)
@@ -89,9 +89,9 @@ class ConvSepHV(Conv):
 
             # kernel shape: rows, cols, channels, filters
             kernel1 = _variable_on_cpu('weights_h', 
-                None if self.init[0] is not None else conv1_shape, self.init[0])
+                None if type(self.init[0]) is np.ndarray None else conv1_shape, self.init[0])
             kernel2 = _variable_on_cpu('weights_v', 
-                None if self.init[1] is not None else
+                None if type(self.init[1]) is np.ndarray None else
                 conv2_shape + [filters, 1], self.init[1])
 
             conv1 = tf.nn.depthwise_conv2d(self.input, kernel1, 
@@ -131,9 +131,9 @@ class ConvSep2D(Conv):
             kernel_depth_shape = [rows, cols, channels, 1]
             kernel_point_shape = [1, 1, channels, filters]
             kernel_depth = _variable_on_cpu('weights_d',
-                None if self.init[0] is not None else kernel_depth_shape, self.init[0])
+                None if type(self.init[0]) is np.ndarray else kernel_depth_shape, self.init[0])
             kernel_point = _variable_on_cpu('weights_p', 
-                None if self.init[1] is not None else kernel_point_shape, self.init[1])
+                None if type(self.init[1]) is np.ndarray else kernel_point_shape, self.init[1])
             conv = tf.nn.separable_conv2d(self.input, kernel_depth, kernel_point, 
                 self.stride, padding=self.padding)
             biases = _variable_on_cpu('biases', 
