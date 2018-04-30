@@ -22,8 +22,11 @@ def main(args):
 			row_data.append(U[0].reshape(rows, 1)) # rows
 
 		channel_params = np.stack(channel_data, axis=-1)
+		print(channel_params.shape)
 		col_params = np.expand_dims(np.stack(col_data, axis=-1), axis=-1)
+		print(col_params.shape)
 		row_params = np.expand_dims(np.stack(row_data, axis=-1), axis=-1)
+		print(row_params.shape)
 
 	path = os.path.join(args.dest_dir, name + '_d.params')
 	with open(path, 'w+') as f:
