@@ -218,7 +218,7 @@ def inference(images, conv1, conv2):
   _activation_summary(convolution1)
 
   # pool1
-  pool1 = tf.nn.max_pool(conv1.conv(), ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
+  pool1 = tf.nn.max_pool(convolution1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
                          padding='SAME', name='pool1')
   # norm1
   norm1 = tf.nn.lrn(pool1, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
@@ -238,7 +238,7 @@ def inference(images, conv1, conv2):
     _activation_summary(conv2)
   '''
 
-  conv2.set_input(convolution1)
+  conv2.set_input(norm1)
   convolution2 = conv2.conv()
   _activation_summary(convolution2)
   # norm2
