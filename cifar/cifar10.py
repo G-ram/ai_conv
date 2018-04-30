@@ -68,7 +68,7 @@ NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = input.NUM_EXAMPLES_PER_EPOCH_FOR_EVAL
 MOVING_AVERAGE_DECAY = 0.9999     # The decay to use for the moving average.
 NUM_EPOCHS_PER_DECAY = 350.0      # Epochs after which learning rate decays.
 LEARNING_RATE_DECAY_FACTOR = 0.1  # Learning rate decay factor.
-INITIAL_LEARNING_RATE = 0.1       # Initial learning rate.
+INITIAL_LEARNING_RATE = 0.01       # Initial learning rate.
 
 # If a model is trained with multiple GPUs, prefix all Op names with tower_name
 # to differentiate the operations. Note that this prefix is removed from the
@@ -215,7 +215,7 @@ def inference(images, conv1, conv2):
   '''
   conv1.set_input(images)
   convolution1 = conv1.conv()
-  _activation_summary(convolution1)
+  # _activation_summary(convolution1)
 
   # pool1
   pool1 = tf.nn.max_pool(convolution1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
@@ -240,7 +240,7 @@ def inference(images, conv1, conv2):
 
   conv2.set_input(norm1)
   convolution2 = conv2.conv()
-  _activation_summary(convolution2)
+  # _activation_summary(convolution2)
   # norm2
   norm2 = tf.nn.lrn(convolution2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
                     name='norm2')
