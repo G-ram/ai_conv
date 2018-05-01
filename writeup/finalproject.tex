@@ -20,6 +20,8 @@
 \usepackage{marginnote} %package for notes in margins
 \usepackage{romannum} %Roman numerals
 \usepackage{authblk} %Author stuff
+\usepackage{multicol}
+
 
 \allowdisplaybreaks
 
@@ -37,11 +39,16 @@
 \newcommand{\Wc}{\mathcal{W}}
 
 
-\title{\vspace{-2em} 15780 Project: Speeding Up Convolutional Neural Networks with Tensor Decompositions}
+\title{\vspace{-3em} 15780 Project: Speeding Up Convolutional Neural Networks with Low-Rank Tensor Topologies}
 \author{Graham Gobieski \quad  Shouvik Mani \quad  Aditya Krishnan}
-\date{ \vspace{-2em}}
+\date{ \vspace{-3em}}
 \begin{document}
 \maketitle
+
+\begin{multicols*}{2}
+[
+\subsection*{Tucker Decompositions}
+]
 
 CNNs have revolutionized machine learning and AI techniques to solve problems in computer vision. A fundamental component of CNNs are convolution tensors, used to simplify the inputs to the layer by extracting important features of the input. In recent years there has been significant interest in speeding up CNNs by finding good approximations for the convolutional kernels, for example, there has been some work trying to approximate the kernels with low-rank approximations and clustering schemes. Our objective in the project was to find decompositions schemes for tensors that can be used to decompose the convolution kernels thereby, hopefully, dramatically reducing the number of variables that need to be trained. 
 
@@ -68,19 +75,30 @@ where $X \in \{\mathcal{G}, W_N, W_C, W_D\}$. Hence, it is sufficient to give th
 
 In order to compute gradients we first give some useful notation. Define $\mathds{1}_{n \times m} \in \R^{n \times m}$ to be a matrix of $1$s. Let $\mathsf{vec}(\mathcal{X})$ be a vector in $\R^{I\cdot J \cdot K}$ for a 3D-tensor $\mathcal{X} \in \R^{I \times J \times K}$ such that $\mathcal{X}_{ijk} = \mathsf{vec}(\mathcal{X})_{i \cdot I + j \cdot J + k}$. Given the tensor $\tilde{W}$, we can write $\mathsf{vec}{\tilde{W}}$ as 
 $$\mathsf{vec}(\tilde{W}) = (W_D \otimes W_C \otimes W_N)\mathsf{vec}(\mathcal{G}) $$ 
-We now give the gradients of $\mathsf{vec}(\tilde{W})$ with respect to the parameters $W_N, W_D, W_C, \mathcal{G}$
+We now give the gradients of $\mathsf{vec}(\tilde{W})$ with respect to the parameters $W_N, W_D, W_C, \mathsf{vec}(\mathcal{G})$
 \begin{align*}
-&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_D} = (\mathds{1}_{d^2 \times D'} \otimes W_C \otimes W_N)\mathsf{vec}(\mathcal{G})
-&&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_C} = (W_D \otimes \mathds{1}_{C \times C'} \otimes W_N)\mathsf{vec}(\mathcal{G}) \\ 
-&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_N} = (W_D \otimes W_C \otimes \mathds{1}_{N \times N'})\mathsf{vec}(\mathcal{G})
-&&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial \mathcal{G}} = (W_D \otimes W_C \otimes W_N) \cdot \mathds{1}_{C'\cdot D' \cdot N'}
+&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_D} = (\mathds{1}_{d^2 \times D'} \otimes W_C \otimes W_N)\mathsf{vec}(\mathcal{G}) \\
+&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_C} = (W_D \otimes \mathds{1}_{C \times C'} \otimes W_N)\mathsf{vec}(\mathcal{G}) \\ 
+&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial W_N} = (W_D \otimes W_C \otimes \mathds{1}_{N \times N'})\mathsf{vec}(\mathcal{G}) \\
+&\frac{\partial \mathsf{vec}(\tilde{W})}{\partial \mathsf{vec}(\mathcal{G})} = (W_D \otimes W_C \otimes W_N) \cdot \mathds{1}_{C'\cdot D' \cdot N'}
 \end{align*}
 Where $\mathds{1}_{C'\cdot D' \cdot N'} \in \R^{C'\cdot D' \cdot N'}$ is a vector of $1$s. We tried to show that the gradient under vectorization doesn't change but this doesn't seem to be simple.   
 
 Now that we have explored the changes to back-propagation, we have left to explore the training of the hyper-parameters $N',C',D'$. In order to do so, we suggest computing the full tensor $\tilde{W}$ as we would using the validation data set and then compute the Tucker-decomposition using Higher-Order Orthogonal Iteration. This will give us a candidate $W_N', W_C'$ and $W_D'$. We can then perform \textsf{SVD} on these matrices which would output some singular values $\sigma_1, \dots, \sigma_{i_m}$. By comparing the the relative sizes of the singular values, one can find a integer $k_i \leq i_m$ such that the top $k_i$ singular values are a good low-rank approximation of the matrix. The value $k_i$ for each $i \in \{N, C, D\}$  would then be the values of the hyper-parameters.  
 
+\subsection*{Architecture}
+
+
+So as to build a framework more suitable for code, we don't decompose across the output feature dimension. Instead, we decompose along the two spatial dimensions and input feature dimension. 
+
+
+\subsection*{Our Results}
 
 
 
 
+
+
+
+\end{multicols*}
 \end{document}

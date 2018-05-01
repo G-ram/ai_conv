@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  29 APR 2018 19:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  30 APR 2018 22:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1332,19 +1332,19 @@ Package: mathpazo 2005/04/12 PSNFSS-v9.2a Palatino w/ Pazo Math (D.Puga, WaS)
 (./finalproject.aux)
 \openout1 = `finalproject.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Try loading font information for OT1+ppl on input line 43.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Try loading font information for OT1+ppl on input line 45.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
@@ -1418,61 +1418,63 @@ ABD: EveryShipout initializing macros
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.12} into 
 your preamble.
- on input line 43.
+ on input line 45.
 
 ABD: EverySelectfont initializing macros
-LaTeX Info: Redefining \selectfont on input line 43.
+LaTeX Info: Redefining \selectfont on input line 45.
 Package marginnote Info: \pdfoutput not 0 and \pdflastxpos available.
 (marginnote)             Extended position detection mode activated.
-LaTeX Font Info:    Try loading font information for OML+zplm on input line 48.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 52.
+LaTeX Font Info:    Try loading font information for OML+zplm on input line 55.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMS+zplm on input line 48.
+LaTeX Font Info:    Try loading font information for OMS+zplm on input line 55.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMX+zplm on input line 48.
+LaTeX Font Info:    Try loading font information for OMX+zplm on input line 55.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Try loading font information for U+stmry on input line 48.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 55.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 48.
+(Font)              scaled to size 10.42007pt on input line 55.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 48.
+(Font)              scaled to size 7.91925pt on input line 55.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 48.
+(Font)              scaled to size 6.25204pt on input line 55.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 48.
+(Font)              scaled to size 10.42007pt on input line 55.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 48.
+(Font)              scaled to size 7.91925pt on input line 55.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 48.
+(Font)              scaled to size 6.25204pt on input line 55.
 
 
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
-(Font)              using `U/stmry/m/n' instead on input line 48.
+(Font)              using `U/stmry/m/n' instead on input line 55.
 
-LaTeX Font Info:    Try loading font information for U+wasy on input line 48.
+LaTeX Font Info:    Try loading font information for U+wasy on input line 55.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for OT1+zplm on input line 48.
+LaTeX Font Info:    Try loading font information for OT1+zplm on input line 55.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
-LaTeX Font Info:    Try loading font information for U+fplmbb on input line 48.
+LaTeX Font Info:    Try loading font information for U+fplmbb on input line 55.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ufplmbb.fd
@@ -1481,28 +1483,31 @@ File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
 <tucker.png, id=4, 405.515pt x 283.0575pt>
 File: tucker.png Graphic file (type png)
  <use tucker.png>
-Package pdftex.def Info: tucker.png used on input line 52.
+Package pdftex.def Info: tucker.png used on input line 59.
 (pdftex.def)             Requested size: 121.65543pt x 84.9179pt.
- [1
+
+Overfull \hbox (0.12216pt too wide) detected at line 67
+\OML/zplm/m/it/10 W ? Z \OT1/zplm/m/n/10 = [] []
+ []
+
+[1
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./tucke
 r.png>]
-LaTeX Font Info:    Try loading font information for U+dsrom on input line 69.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/doublestroke/Udsrom.fd
+LaTeX Font Info:    Try loading font information for U+dsrom on input line 76.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/doublestroke/Udsrom.fd
 File: Udsrom.fd 1995/08/01 v0.1 Double stroke roman font definitions
-) [2]
-(./finalproject.aux)
+) [2] (./finalproject.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 32730 strings out of 493089
- 745226 string characters out of 6134842
- 983216 words of memory out of 5000000
- 35602 multiletter control sequences out of 15000+600000
- 26968 words of font info for 86 fonts, out of 8000000 for 9000
+ 32734 strings out of 493089
+ 745267 string characters out of 6134842
+ 986221 words of memory out of 5000000
+ 35604 multiletter control sequences out of 15000+600000
+ 27957 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,10n,77p,10438b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
@@ -1516,12 +1521,13 @@ e/2015/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/20
 15/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2015/te
 xmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2015/texmf-
 dist/fonts/type1/public/stmaryrd/stmary10.pfb></usr/local/texlive/2015/texmf-di
-st/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/font
-s/type1/urw/palatino/uplri8a.pfb>
-Output written on finalproject.pdf (2 pages, 130264 bytes).
+st/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/font
+s/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1
+/urw/palatino/uplri8a.pfb>
+Output written on finalproject.pdf (2 pages, 143421 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 70 PDF objects out of 1000 (max. 8388607)
+ 50 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 

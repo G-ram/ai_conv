@@ -1,8 +1,10 @@
 # Fdb version 3
-["pdflatex"] 1525044601 "finalproject.tex" "finalproject.pdf" "finalproject" 1525044602
+["pdflatex"] 1525142913 "finalproject.tex" "finalproject.pdf" "finalproject" 1525142915
   "./tucker.png" 1525025886 58293 e30ea2cdc6820cfbfb747743189f79d6 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2015/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
+  "/usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplb7t.tfm" 1136768653 1616 371d1ee60c04b008c8fd760060cd34f1 ""
+  "/usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplb8r.tfm" 1136768653 2532 9ad73cf4dd2173a847f2a5f5608e0b9a ""
   "/usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplr7t.tfm" 1136768653 1804 7b5f73028f6509167f47ace9d69509ed ""
   "/usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplr8r.tfm" 1136768653 2796 d37c29814a6717720ee1a7c9a0b2c3b8 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/tfm/adobe/palatino/pplri8r.tfm" 1136768653 2720 70000d5e623e601132eab3cded5b819b ""
@@ -48,8 +50,10 @@
   "/usr/local/texlive/2015/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb" 1136849748 9356 a3851bc942e9b6995883193472ba1847 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb" 1136849748 15213 d999bbe8bd9c8f231f3f66a737c76478 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/type1/public/stmaryrd/stmary10.pfb" 1302307949 27430 0e29b053ae98d5f87d872ee72a12d5f5 ""
+  "/usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb" 1136849748 52406 dad2f72863a03727d5f536c64a69c452 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb" 1136849748 52665 661b1e6b26edb5f50dd491f8a701cb57 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb" 1136849748 50022 90249cba7e3e4e9845f80328d6f9bd13 ""
+  "/usr/local/texlive/2015/texmf-dist/fonts/vf/adobe/palatino/pplb7t.vf" 1136768653 1380 798ef26de8f0a21f37c9b1147f4fe5d8 ""
   "/usr/local/texlive/2015/texmf-dist/fonts/vf/adobe/palatino/pplr7t.vf" 1136768653 1380 037725697594405988999f61172f52de ""
   "/usr/local/texlive/2015/texmf-dist/fonts/vf/public/mathpazo/zplmr7m.vf" 1136768653 1812 de7624743c8bafe2ce204bec2f72ce7e ""
   "/usr/local/texlive/2015/texmf-dist/fonts/vf/public/mathpazo/zplmr7t.vf" 1136768653 1532 73e2c76c81e4f977ab65540630baf4f0 ""
@@ -253,10 +257,10 @@
   "/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1432479641 1764542 91654ba72bdb667e84ea24f076ae16d8 ""
   "/usr/local/texlive/2015/texmf-var/web2c/pdftex/pdflatex.fmt" 1432479681 3849859 39a7d258195bde2394e244961601fbc5 ""
   "/usr/local/texlive/2015/texmf.cnf" 1432479636 577 0d611272082f3cdb8e80e09a3c69cf07 ""
-  "finalproject.aux" 1525044602 63 4ee2ae0aa6344c166fd5ecdee17d399c ""
-  "finalproject.tex" 1525044601 8356 497a933700364da36d9236261ad491f9 ""
+  "finalproject.aux" 1525142915 63 4ee2ae0aa6344c166fd5ecdee17d399c ""
+  "finalproject.tex" 1525142913 8748 b92bc12e2798dd1fa6c86fa7eed06c5a ""
   "tucker.png" 1525025886 58293 e30ea2cdc6820cfbfb747743189f79d6 ""
   (generated)
+  "finalproject.log"
   "finalproject.pdf"
   "finalproject.aux"
-  "finalproject.log"
